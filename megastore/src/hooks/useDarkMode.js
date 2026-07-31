@@ -1,0 +1,26 @@
+import { useEffect, useState } from 'react'
+
+const useDarkMode = () => {
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('megastore_theme')
+    if (saved) return saved === 'dark'
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (isDark) {
+      root.classList.add('dark')
+      localStorage.setItem('megastore_theme', 'dark')
+    } else {
+      root.classList.remove('dark')
+      localStorage.setItem('megastore_theme', 'light')
+    }
+  }, [isDark])
+
+  const toggle = () => setIsDark((prev) => !prev)
+
+  return [isDark, toggle]
+}
+
+export default useDarkMode
